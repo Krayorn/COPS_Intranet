@@ -1,0 +1,47 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+    const cases = await getCollection('cases');
+
+    return (await getCollection('personal')).map((personal) => {
+        return {
+            params: { slug: personal.id},
+            props: { entry: personal, cases: cases.filter((c) => c.data.priority_detective === personal.id) },
+        };
+    });
+}
+
+const { entry, cases } = Astro.props;
+---
+
+<Layout>
+    <main class="mt-10 mx-auto w-[80%] flex flex-col items-center" >
+        <h1 class="font-bold text-4xl" >Personnel file #{entry.data.matriculation_number}</h1>
+    
+        <div class="w-full flex justify-between" >
+            <div class="w-3/4">
+                <h3 class="font-bold text-xl" >Cases</h3>
+                {cases.map((policeCase) => (
+                    <div class="mt-2 grid grid-cols-6">
+                        <a href={`/cases/${policeCase.data.case_number}`}>#{policeCase.data.case_number}</a>
+                        <div>{policeCase.data.name}</div>
+                        <div>{policeCase.data.opened_on}</div>
+                        <div>{policeCase.data.closed_on}</div>
+                        <div>{policeCase.data.status}</div>
+                    </div>
+                ))}
+            </div>
+            <div class="w-1/4 flex flex-col" >
+                <span><span class="font-bold" >Name:</span> {entry.data.name}</span>
+                <span><span class="font-bold" >Rank:</span> {entry.data.rank}</span>
+                <span><span class="font-bold" >Joined On:</span> {entry.data.joined_on}</span>
+                <span><span class="font-bold" >Status:</span> {entry.data.status}</span>
+                <span><span class="font-bold" >Department:</span> {entry.data.department}</span>
+            </div>
+        </div>
+
+
+    </main>
+</Layout>

@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+
+
+const cases = await getCollection('cases');
+---
+
+<Layout>
+	<main class="mt-10 flex flex-col items-center" >
+		<h1 class="font-bold text-4xl" >Cases</h1>
+	
+        <div class="flex flex-col" >
+            <div class="grid grid-cols-6 font-bold" >
+                <div class="text-left" >Case Number</div>
+                <div class="text-left" >Name</div>
+                <div class="text-left" >Opened On</div>
+                <div class="text-left" >Closed On</div>
+                <div class="text-left" >Status</div>
+                <div class="text-left" >Priority Detective</div>
+            </div>
+            {cases && cases.map((policeCase) => (
+                <div class="mt-2 grid grid-cols-6">
+                    <a href={`/cases/${policeCase.data.case_number}`}>#{policeCase.data.case_number}</a>
+                    <div>{policeCase.data.name}</div>
+                    <div>{policeCase.data.opened_on}</div>
+                    <div>{policeCase.data.closed_on}</div>
+                    <div>{policeCase.data.status}</div>
+                    <a href={`/personal/${policeCase.data.priority_detective}`}>#{policeCase.data.priority_detective}</a>
+                </div>
+            ))}
+        </div>
+	</main>
+</Layout>
