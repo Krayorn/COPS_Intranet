@@ -29,5 +29,15 @@ const personal = defineCollection({
     }),
 });
 
+const civilians = defineCollection({
+    loader: glob({ pattern: "./*.json", base: "./src/content/civilians" }),
+    schema: z.object({
+        name: z.string(),
+        status: z.string(),
+        linked_cases: z.array(z.number()),
+        affiliations: z.array(z.string())
+    }),
+});
+
 // 4. Export a single `collections` object to register your collection(s)
-export const collections = { cases, personal };
+export const collections = { cases, personal, civilians };

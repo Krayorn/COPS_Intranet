@@ -1,8 +1,8 @@
 {
     "case_number": "1231",
     "name": "Fake DEA",
-    "opened_on": "2024-01-01",
-    "closed_on": "2024-01-01",
+    "opened_on": "2032-07-16",
+    "closed_on": "2032-07-17",
     "status": "Closed",
     "priority_detective": "088"
 }

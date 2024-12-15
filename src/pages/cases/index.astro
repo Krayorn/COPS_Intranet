@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from "astro:content";
 
-
 const cases = await getCollection('cases');
 ---
 
@@ -19,7 +18,7 @@ const cases = await getCollection('cases');
                 <div class="text-left" >Status</div>
                 <div class="text-left" >Priority Detective</div>
             </div>
-            {cases && cases.map((policeCase) => (
+            {cases && cases.sort((a, b) => a.data.opened_on < b.data.opened_on ? -1 : 1).map((policeCase) => (
                 <div class="mt-2 grid grid-cols-6">
                     <a href={`/cases/${policeCase.data.case_number}`}>#{policeCase.data.case_number}</a>
                     <div>{policeCase.data.name}</div>

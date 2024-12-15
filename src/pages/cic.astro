@@ -1,0 +1,15 @@
+---
+import { Search } from '../components/Search';
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from "astro:content";
+
+const civilians = await getCollection('civilians');
+
+
+---
+
+<Layout>
+	<main class="mt-10 flex flex-col items-center" >
+		<Search client:load options={civilians.map(civilian => ({value: civilian.data.name, link: `/civilans/${civilian.id}`}))} /> 
+	</main>
+</Layout>
