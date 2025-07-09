@@ -3,12 +3,18 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
+    const civilians = await getCollection('civilians');
     const cases = await getCollection('cases');
 
-    return (await getCollection('personal')).map((personal) => {
+    return civilians.map((civilian) => {
+        // Filter cases that are linked to this civilian
+        const linkedCases = cases.filter((c) => 
+            civilian.data.linked_cases.includes(parseInt(c.data.case_number))
+        );
+
         return {
-            params: { slug: personal.id},
-            props: { entry: personal, cases: cases.filter((c) => c.data.priority_detective === personal.id) },
+            params: { slug: civilian.id },
+            props: { entry: civilian, cases: linkedCases },
         };
     });
 }
@@ -19,21 +25,20 @@ const { entry, cases } = Astro.props;
 <Layout>
     <main class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Personnel Header -->
+            <!-- Civilian Header -->
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-4">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                        Personnel #{entry.data.matriculation_number}
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        Civilian Record: {entry.data.name}
                     </h1>
                     <span class={`px-4 py-2 rounded-full text-sm font-medium ${
-                        entry.data.status === 'active' 
+                        entry.data.status === 'alive' 
                             ? 'bg-green-400/20 text-green-300 border border-green-400/30' 
                             : 'bg-red-400/20 text-red-300 border border-red-400/30'
                     }`}>
                         {entry.data.status.toUpperCase()}
                     </span>
                 </div>
-                <h2 class="text-2xl font-semibold text-blue-100 mb-6">{entry.data.name}</h2>
             </div>
 
             <!-- Main Content Grid -->
@@ -44,7 +49,7 @@ const { entry, cases } = Astro.props;
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-cyan-400 flex items-center">
                                 <span class="mr-2">📋</span>
-                                Assigned Cases
+                                Linked Cases
                             </h3>
                             <span class="text-cyan-300/70 text-sm">{cases.length} cases</span>
                         </div>
@@ -81,42 +86,27 @@ const { entry, cases } = Astro.props;
                                 <div class="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span class="text-2xl">📋</span>
                                 </div>
-                                <p class="text-cyan-300/70">No cases assigned to this personnel.</p>
+                                <p class="text-cyan-300/70">No cases linked to this civilian.</p>
                             </div>
                         )}
                     </div>
                 </div>
 
-                <!-- Personnel Info Sidebar -->
+                <!-- Civilian Info Sidebar -->
                 <div class="space-y-6">
                     <!-- Profile Card -->
-                    <div class="bg-slate-800/30 border border-blue-400/20 rounded-xl p-6">
+                    <div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-6">
                         <div class="text-center mb-6">
-                            <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span class="text-slate-900 font-bold text-xl">{entry.data.name.split(' ').map(n => n[0]).join('')}</span>
                             </div>
-                            <h3 class="text-lg font-bold text-blue-300">{entry.data.name}</h3>
-                            <p class="text-blue-400/70 text-sm">{entry.data.rank}</p>
+                            <h3 class="text-lg font-bold text-purple-300">{entry.data.name}</h3>
+                            <p class="text-purple-400/70 text-sm">Civilian Record</p>
                         </div>
                         
                         <div class="space-y-3">
                             <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                                <span class="text-blue-300/70 text-sm">ID Number</span>
-                                <span class="text-blue-400 font-mono font-bold">#{entry.data.matriculation_number}</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                                <span class="text-blue-300/70 text-sm">Department</span>
-                                <span class="text-blue-100">{entry.data.department}</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                                <span class="text-blue-300/70 text-sm">Joined</span>
-                                <span class="text-blue-100">{entry.data.joined_on}</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                                <span class="text-blue-300/70 text-sm">Status</span>
+                                <span class="text-purple-300/70 text-sm">Status</span>
                                 <span class={`px-2 py-1 rounded-full text-xs font-medium ${
                                     entry.data.status === 'active' 
                                         ? 'bg-green-400/20 text-green-300' 
@@ -125,41 +115,92 @@ const { entry, cases } = Astro.props;
                                     {entry.data.status}
                                 </span>
                             </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                                <span class="text-purple-300/70 text-sm">Linked Cases</span>
+                                <span class="text-purple-400 font-bold">{entry.data.linked_cases.length}</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                                <span class="text-purple-300/70 text-sm">Affiliations</span>
+                                <span class="text-purple-100">{entry.data.affiliations.length || 'None'}</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                                <span class="text-purple-300/70 text-sm">Professions</span>
+                                <span class="text-purple-100">{entry.data.professions.length || 'None'}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Quick Stats -->
+                    <!-- Affiliations -->
+                    {entry.data.affiliations.length > 0 && (
+                        <div class="bg-slate-800/30 border border-pink-400/20 rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-pink-400 mb-4 flex items-center">
+                                <span class="mr-2">🏢</span>
+                                Affiliations
+                            </h3>
+                            <div class="space-y-2">
+                                {entry.data.affiliations.map((affiliation) => (
+                                    <div class="flex items-center space-x-2 p-2 bg-slate-700/30 rounded-lg">
+                                        <span class="w-2 h-2 bg-pink-400 rounded-full"></span>
+                                        <span class="text-pink-300 text-sm">{affiliation}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <!-- Professions -->
+                    {entry.data.professions.length > 0 && (
+                        <div class="bg-slate-800/30 border border-blue-400/20 rounded-xl p-6">
+                            <h3 class="text-lg font-bold text-blue-400 mb-4 flex items-center">
+                                <span class="mr-2">💼</span>
+                                Professions
+                            </h3>
+                            <div class="space-y-2">
+                                {entry.data.professions.map((profession) => (
+                                    <div class="flex items-center space-x-2 p-2 bg-slate-700/30 rounded-lg">
+                                        <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                                        <span class="text-blue-300 text-sm">{profession}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <!-- Quick Actions -->
                     <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl p-6">
-                        <h3 class="text-lg font-bold text-cyan-400 mb-4">Case Statistics</h3>
+                        <h3 class="text-lg font-bold text-cyan-400 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button class="w-full px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
+                                📝 Add Notes
+                            </button>
+                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
+                                🔗 Link Case
+                            </button>
+                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
+                                📊 View History
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Case Statistics -->
+                    <div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-6">
+                        <h3 class="text-lg font-bold text-purple-400 mb-4">Case Statistics</h3>
                         <div class="space-y-3">
                             <div class="flex items-center justify-between">
-                                <span class="text-cyan-300/70 text-sm">Total Cases</span>
-                                <span class="text-cyan-400 font-bold">{cases.length}</span>
+                                <span class="text-purple-300/70 text-sm">Total Cases</span>
+                                <span class="text-purple-400 font-bold">{cases.length}</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-cyan-300/70 text-sm">Active Cases</span>
+                                <span class="text-purple-300/70 text-sm">Active Cases</span>
                                 <span class="text-green-400 font-bold">{cases.filter(c => c.data.status === 'active').length}</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-cyan-300/70 text-sm">Closed Cases</span>
+                                <span class="text-purple-300/70 text-sm">Closed Cases</span>
                                 <span class="text-red-400 font-bold">{cases.filter(c => c.data.status === 'closed').length}</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-6">
-                        <h3 class="text-lg font-bold text-purple-400 mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-400 text-slate-900 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
-                                📧 Contact
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-purple-400/30 hover:border-purple-400/60 rounded-lg font-medium transition-all duration-200">
-                                📊 View Reports
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-purple-400/30 hover:border-purple-400/60 rounded-lg font-medium transition-all duration-200">
-                                📅 Schedule
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -167,9 +208,9 @@ const { entry, cases } = Astro.props;
 
             <!-- Navigation -->
             <div class="mt-8 flex justify-between items-center">
-                <a href="/cases" class="flex items-center space-x-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
+                <a href="/cic" class="flex items-center space-x-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-purple-400/30 hover:border-purple-400/60 rounded-lg font-medium transition-all duration-200">
                     <span>←</span>
-                    <span>Back to Cases</span>
+                    <span>Back to CIC</span>
                 </a>
                 <div class="flex items-center space-x-4 text-sm text-cyan-300/70">
                     <span>Last Updated: {new Date().toLocaleDateString()}</span>
@@ -177,4 +218,4 @@ const { entry, cases } = Astro.props;
             </div>
         </div>
     </main>
-</Layout>
+</Layout> 

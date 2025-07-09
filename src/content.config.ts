@@ -35,7 +35,8 @@ const civilians = defineCollection({
         name: z.string(),
         status: z.string(),
         linked_cases: z.array(z.number()),
-        affiliations: z.array(z.string())
+        affiliations: z.array(z.string()),
+        professions: z.array(z.string())
     }),
 });
 

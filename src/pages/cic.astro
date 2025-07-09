@@ -4,12 +4,135 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from "astro:content";
 
 const civilians = await getCollection('civilians');
-
-
 ---
 
 <Layout>
-	<main class="mt-10 flex flex-col items-center" >
-		<Search client:load options={civilians.map(civilian => ({value: civilian.data.name, link: `/civilans/${civilian.id}`}))} /> 
+	<main class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+			<!-- Header -->
+			<div class="text-center mb-12">
+				<h1 class="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
+					👥 Civilian Intelligence Center
+				</h1>
+				<p class="text-xl text-purple-200/80 max-w-3xl mx-auto">
+					Search and access civilian records, affiliations, and case connections in the LAPD database.
+				</p>
+			</div>
+
+			<!-- Search Section -->
+			<div class="max-w-2xl mx-auto mb-12">
+				<div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-8">
+					<div class="text-center mb-6">
+						<div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
+							<span class="text-2xl">🔍</span>
+						</div>
+						<h2 class="text-2xl font-bold text-purple-400 mb-2">Search Database</h2>
+						<p class="text-purple-300/70">Enter a civilian name to access their records</p>
+					</div>
+					
+					<Search client:load options={civilians.map(civilian => ({value: civilian.data.name, link: `/civilians/${civilian.id}`}))} />
+				</div>
+			</div>
+
+			<!-- Quick Stats -->
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+				<div class="bg-slate-800/50 border border-purple-400/30 rounded-lg p-6 hover:border-purple-400/60 transition-all duration-300 group">
+					<div class="flex items-center justify-between">
+						<div>
+							<p class="text-purple-300/70 text-sm font-medium">Total Civilians</p>
+							<p class="text-3xl font-bold text-purple-400">{civilians.length}</p>
+						</div>
+						<div class="w-12 h-12 bg-purple-400/20 rounded-lg flex items-center justify-center group-hover:bg-purple-400/30 transition-all duration-300">
+							<span class="text-2xl">👥</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-slate-800/50 border border-pink-400/30 rounded-lg p-6 hover:border-pink-400/60 transition-all duration-300 group">
+					<div class="flex items-center justify-between">
+						<div>
+							<p class="text-pink-300/70 text-sm font-medium">Deceased Records</p>
+							<p class="text-3xl font-bold text-pink-400">{civilians.filter(c => c.data.status === 'deceased').length}</p>
+						</div>
+						<div class="w-12 h-12 bg-pink-400/20 rounded-lg flex items-center justify-center group-hover:bg-pink-400/30 transition-all duration-300">
+							<span class="text-2xl">🟢</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-6 hover:border-cyan-400/60 transition-all duration-300 group">
+					<div class="flex items-center justify-between">
+						<div>
+							<p class="text-cyan-300/70 text-sm font-medium">Case Connections</p>
+							<p class="text-3xl font-bold text-cyan-400">{civilians.reduce((acc, c) => acc + c.data.linked_cases.length, 0)}</p>
+						</div>
+						<div class="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center group-hover:bg-cyan-400/30 transition-all duration-300">
+							<span class="text-2xl">🔗</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Recent Civilians -->
+			<div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-8">
+				<div class="flex items-center justify-between mb-6">
+					<h2 class="text-2xl font-bold text-purple-400">Recent Civilian Records</h2>
+					<span class="text-purple-300/70 text-sm">Showing {civilians.length} records</span>
+				</div>
+				
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{civilians.map((civilian) => (
+						<div class="bg-slate-700/30 border border-purple-400/20 rounded-lg p-4 hover:border-purple-400/40 hover:bg-slate-700/50 transition-all duration-200 group">
+							<div class="flex items-center justify-between mb-3">
+								<h3 class="text-purple-300 font-medium">{civilian.data.name}</h3>
+								<span class={`px-2 py-1 rounded-full text-xs font-medium ${
+									civilian.data.status === 'active' 
+										? 'bg-green-400/20 text-green-300' 
+										: 'bg-red-400/20 text-red-300'
+								}`}>
+									{civilian.data.status}
+								</span>
+							</div>
+							
+							                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-purple-300/70">Linked Cases:</span>
+                                    <span class="text-purple-300 font-medium">{civilian.data.linked_cases.length}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-purple-300/70">Affiliations:</span>
+                                    <span class="text-purple-300 font-medium">{civilian.data.affiliations.length || 'None'}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-purple-300/70">Professions:</span>
+                                    <span class="text-purple-300 font-medium">{civilian.data.professions?.length || 'None'}</span>
+                                </div>
+                            </div>
+							
+							<div class="mt-4">
+								<a href={`/civilians/${civilian.id}`} 
+								   class="text-purple-400 hover:text-purple-300 text-sm font-medium group-hover:underline transition-all duration-200">
+									View Details →
+								</a>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Quick Actions -->
+			<div class="mt-12 text-center">
+				<div class="inline-flex items-center space-x-4 p-4 bg-slate-800/50 border border-purple-400/30 rounded-lg">
+					<a href="/cases" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
+						<span>📋</span>
+						<span>View Cases</span>
+					</a>
+					<a href="/" class="flex items-center space-x-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 border border-purple-400/30 hover:border-purple-400/60 rounded-lg font-medium transition-all duration-300">
+						<span>🏠</span>
+						<span>Dashboard</span>
+					</a>
+				</div>
+			</div>
+		</div>
 	</main>
 </Layout>

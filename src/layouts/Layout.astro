@@ -5,25 +5,88 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>LAPD Intranet - 2030</title>
 	</head>
-	<body>
-		<nav class="flex flex items-center p-2" >
-			<a href="/" class="text-2xl mx-2" >LAPD Intranet</a>
-			<a href="/cases" class="text-2xl mx-2">Cases</a>
-			<a href="/cic" class="text-2xl mx-2">CIC</a>
-		</nav>
+	<body class="bg-slate-900 text-cyan-100 min-h-screen">
+		<!-- Futuristic Header -->
+		<header class="bg-gradient-to-r from-slate-800 via-blue-900 to-slate-800 border-b-2 border-cyan-400/30 shadow-lg">
+			<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex items-center justify-between h-16">
+					<div class="flex items-center space-x-8">
+						<a href="/" class="flex items-center space-x-2 group">
+							<div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center">
+								<span class="text-slate-900 font-bold text-sm">LAPD</span>
+							</div>
+							<span class="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-blue-300 transition-all duration-300">
+								Intranet 2030
+							</span>
+						</a>
+						
+						<div class="hidden md:flex items-center space-x-6">
+							<a href="/cases" class="text-cyan-100 hover:text-cyan-300 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-cyan-400/10 border border-transparent hover:border-cyan-400/30">
+								📋 Cases
+							</a>
+							<a href="/cic" class="text-cyan-100 hover:text-cyan-300 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:bg-cyan-400/10 border border-transparent hover:border-cyan-400/30">
+								👥 CIC Database
+							</a>
+						</div>
+					</div>
+					
+					<div class="flex items-center space-x-4">
+						<div class="text-xs text-cyan-300/70">
+							<span class="animate-pulse">●</span> SYSTEM ONLINE
+						</div>
+						<div class="text-xs text-cyan-300/70">
+							{new Date().toLocaleDateString('en-US', { 
+								year: 'numeric', 
+								month: 'short', 
+								day: 'numeric',
+								hour: '2-digit',
+								minute: '2-digit'
+							})}
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+		
 		<slot />
+		
+		<!-- Futuristic Footer -->
+		<footer class="mt-auto bg-slate-800/50 border-t border-cyan-400/20 py-4">
+			<div class="max-w-7xl mx-auto px-4 text-center text-xs text-cyan-300/60">
+				<div class="flex justify-center items-center space-x-4">
+					<span>LAPD Internal Network</span>
+					<span>•</span>
+					<span>Secure Connection</span>
+					<span>•</span>
+					<span>Los Angeles, CA 2030</span>
+				</div>
+			</div>
+		</footer>
 	</body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		background-color: hsl(206.25deg 51.61% 48.63%);
-		color: white;
+	html {
+		scroll-behavior: smooth;
+	}
+	
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+	
+	::-webkit-scrollbar-track {
+		background: #1e293b;
+	}
+	
+	::-webkit-scrollbar-thumb {
+		background: #06b6d4;
+		border-radius: 4px;
+	}
+	
+	::-webkit-scrollbar-thumb:hover {
+		background: #0891b2;
 	}
 </style>

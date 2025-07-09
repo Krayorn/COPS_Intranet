@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 export function Search({ options }) {
-    const [search, setSearch] = useState("ka")
+    const [search, setSearch] = useState("")
     const possibilities = search !== "" ? options.filter(option => option.value.toLowerCase().includes(search.toLowerCase())) : []
     
     return (
