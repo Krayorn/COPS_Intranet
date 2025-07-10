@@ -4,5 +4,19 @@
     "opened_on": "2032-12-13",
     "closed_on": "2032-12-16",
     "status": "closed",
-    "priority_detective": "088"
+    "priority_detective": "088",
+    "persons_of_interest": [
+        "Boris Janowicz",
+        "Kai Stone",
+        "Karston Starr",
+        "Aisha Williams",
+        "Claudia Janowicz",
+        "Emery Bailey",
+        "Lucie Roger"
+    ],
+    "assigned_personnel": [
+        "088",
+        "023",
+        "032"
+    ]
 }

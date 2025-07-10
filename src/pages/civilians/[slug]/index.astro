@@ -1,15 +1,16 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from "astro:content";
+import { IN_GAME_DATE } from '../../../../constants';
 
 export async function getStaticPaths() {
     const civilians = await getCollection('civilians');
     const cases = await getCollection('cases');
 
     return civilians.map((civilian) => {
-        // Filter cases that are linked to this civilian
+        // Find cases where this civilian is flagged as a person of interest
         const linkedCases = cases.filter((c) => 
-            civilian.data.linked_cases.includes(parseInt(c.data.case_number))
+            c.data.persons_of_interest && c.data.persons_of_interest.includes(civilian.data.name)
         );
 
         return {
@@ -20,6 +21,19 @@ export async function getStaticPaths() {
 }
 
 const { entry, cases } = Astro.props;
+
+// Function to calculate age from birth date
+function calculateAge(birthDate: string | null): number | null {
+    if (!birthDate) return null;
+    const birth = new Date(birthDate);
+    const current = new Date(IN_GAME_DATE);
+    const age = current.getFullYear() - birth.getFullYear();
+    const monthDiff = current.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && current.getDate() < birth.getDate())) {
+        return age - 1;
+    }
+    return age;
+}
 ---
 
 <Layout>
@@ -49,7 +63,7 @@ const { entry, cases } = Astro.props;
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-xl font-bold text-cyan-400 flex items-center">
                                 <span class="mr-2">📋</span>
-                                Linked Cases
+                                Cases of Interest
                             </h3>
                             <span class="text-cyan-300/70 text-sm">{cases.length} cases</span>
                         </div>
@@ -86,7 +100,7 @@ const { entry, cases } = Astro.props;
                                 <div class="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span class="text-2xl">📋</span>
                                 </div>
-                                <p class="text-cyan-300/70">No cases linked to this civilian.</p>
+                                <p class="text-cyan-300/70">No cases where this civilian is flagged as a person of interest.</p>
                             </div>
                         )}
                     </div>
@@ -117,8 +131,8 @@ const { entry, cases } = Astro.props;
                             </div>
                             
                             <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
-                                <span class="text-purple-300/70 text-sm">Linked Cases</span>
-                                <span class="text-purple-400 font-bold">{entry.data.linked_cases.length}</span>
+                                <span class="text-purple-300/70 text-sm">Related Cases</span>
+                                <span class="text-purple-400 font-bold">{cases.length}</span>
                             </div>
                             
                             <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
@@ -130,6 +144,19 @@ const { entry, cases } = Astro.props;
                                 <span class="text-purple-300/70 text-sm">Professions</span>
                                 <span class="text-purple-100">{entry.data.professions.length || 'None'}</span>
                             </div>
+                            
+                            {entry.data.birth_date && (
+                                <>
+                                    <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                                        <span class="text-purple-300/70 text-sm">Birth Date</span>
+                                        <span class="text-purple-100">{entry.data.birth_date}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                                        <span class="text-purple-300/70 text-sm">Age</span>
+                                        <span class="text-purple-100">{calculateAge(entry.data.birth_date)}</span>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -169,21 +196,7 @@ const { entry, cases } = Astro.props;
                         </div>
                     )}
 
-                    <!-- Quick Actions -->
-                    <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl p-6">
-                        <h3 class="text-lg font-bold text-cyan-400 mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="w-full px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
-                                📝 Add Notes
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
-                                🔗 Link Case
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
-                                📊 View History
-                            </button>
-                        </div>
-                    </div>
+
 
                     <!-- Case Statistics -->
                     <div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-6">

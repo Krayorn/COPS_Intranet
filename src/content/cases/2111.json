@@ -4,5 +4,11 @@
     "opened_on": "2032-12-14",
     "closed_on": "2032-12-17",
     "status": "closed",
-    "priority_detective": "149"
+    "priority_detective": "023",
+    "persons_of_interest": [],
+    "assigned_personnel": [
+        "023",
+        "088",
+        "032"
+    ]
 }

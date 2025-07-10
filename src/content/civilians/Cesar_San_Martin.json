@@ -1,7 +1,11 @@
 {
     "name": "Cesar San Martin",
-    "affiliations": ["clanton 14"],
+    "affiliations": [
+        "clanton 14"
+    ],
     "status": "alive",
-    "linked_cases": [],
-    "professions": ["Social Worker"]
+    "professions": [
+        "Social Worker"
+    ],
+    "birth_date": null
 }

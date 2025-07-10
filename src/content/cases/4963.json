@@ -4,5 +4,14 @@
     "opened_on": "2032-12-15",
     "closed_on": "2032-12-17",
     "status": "closed",
-    "priority_detective": "088"
+    "priority_detective": "088",
+    "persons_of_interest": [
+        "Kai Stone",
+        "Karston Starr"
+    ],
+    "assigned_personnel": [
+        "088",
+        "023",
+        "032"
+    ]
 }

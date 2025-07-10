@@ -2,8 +2,26 @@
 import { Search } from '../components/Search';
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from "astro:content";
+import { IN_GAME_DATE } from '../../constants';
 
 const civilians = await getCollection('civilians');
+
+// Function to calculate age from birth date
+function calculateAge(birthDate: string | null): number | null {
+    if (!birthDate) return null;
+    const birth = new Date(birthDate);
+    const current = new Date(IN_GAME_DATE);
+    const age = current.getFullYear() - birth.getFullYear();
+    const monthDiff = current.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && current.getDate() < birth.getDate())) {
+        return age - 1;
+    }
+    return age;
+}
+
+// Calculate unique affiliations
+const allAffiliations = civilians.flatMap(civilian => civilian.data.affiliations);
+const uniqueAffiliations = [...new Set(allAffiliations)].filter(affiliation => affiliation.trim() !== '');
 ---
 
 <Layout>
@@ -20,117 +38,75 @@ const civilians = await getCollection('civilians');
 			</div>
 
 			<!-- Search Section -->
-			<div class="max-w-2xl mx-auto mb-12">
-				<div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-8">
-					<div class="text-center mb-6">
-						<div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
-							<span class="text-2xl">🔍</span>
+			<div class="max-w-4xl mx-auto mb-12">
+				<div class="bg-gradient-to-br from-slate-800/40 via-purple-900/20 to-slate-800/40 border border-purple-400/30 rounded-2xl p-10 shadow-2xl">
+					<div class="text-center mb-8">
+						<div class="w-20 h-20 bg-gradient-to-br from-purple-400 via-pink-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+							<span class="text-3xl">🔍</span>
 						</div>
-						<h2 class="text-2xl font-bold text-purple-400 mb-2">Search Database</h2>
-						<p class="text-purple-300/70">Enter a civilian name to access their records</p>
+						<h2 class="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-3">Civilian Database Search</h2>
+						<p class="text-purple-200/80 text-lg">Search and access civilian records in the LAPD intelligence database</p>
 					</div>
 					
-					<Search client:load options={civilians.map(civilian => ({value: civilian.data.name, link: `/civilians/${civilian.id}`}))} />
+					<div class="bg-slate-900/50 border border-purple-400/20 rounded-xl p-6 backdrop-blur-sm">
+						<Search client:load options={civilians.map(civilian => ({value: civilian.data.name, link: `/civilians/${civilian.id}`}))} />
+					</div>
+					
+					<div class="mt-6 text-center">
+						<div class="inline-flex items-center space-x-6 text-sm text-purple-300/70">
+							<div class="flex items-center space-x-2">
+								<span class="w-2 h-2 bg-purple-400 rounded-full"></span>
+								<span>Real-time search</span>
+							</div>
+							<div class="flex items-center space-x-2">
+								<span class="w-2 h-2 bg-pink-400 rounded-full"></span>
+								<span>Secure access</span>
+							</div>
+							<div class="flex items-center space-x-2">
+								<span class="w-2 h-2 bg-cyan-400 rounded-full"></span>
+								<span>Instant results</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<!-- Quick Stats -->
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-				<div class="bg-slate-800/50 border border-purple-400/30 rounded-lg p-6 hover:border-purple-400/60 transition-all duration-300 group">
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+				<div class="bg-gradient-to-br from-slate-800/60 via-purple-900/20 to-slate-800/60 border border-purple-400/40 rounded-xl p-8 hover:border-purple-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
 					<div class="flex items-center justify-between">
 						<div>
-							<p class="text-purple-300/70 text-sm font-medium">Total Civilians</p>
-							<p class="text-3xl font-bold text-purple-400">{civilians.length}</p>
+							<p class="text-purple-300/80 text-sm font-medium uppercase tracking-wide">Total Civilians</p>
+							<p class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{civilians.length}</p>
 						</div>
-						<div class="w-12 h-12 bg-purple-400/20 rounded-lg flex items-center justify-center group-hover:bg-purple-400/30 transition-all duration-300">
-							<span class="text-2xl">👥</span>
+						<div class="w-16 h-16 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-xl flex items-center justify-center group-hover:from-purple-400/40 group-hover:to-pink-400/40 transition-all duration-300 shadow-lg">
+							<span class="text-3xl">👥</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-slate-800/50 border border-pink-400/30 rounded-lg p-6 hover:border-pink-400/60 transition-all duration-300 group">
+				<div class="bg-gradient-to-br from-slate-800/60 via-pink-900/20 to-slate-800/60 border border-pink-400/40 rounded-xl p-8 hover:border-pink-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
 					<div class="flex items-center justify-between">
 						<div>
-							<p class="text-pink-300/70 text-sm font-medium">Deceased Records</p>
-							<p class="text-3xl font-bold text-pink-400">{civilians.filter(c => c.data.status === 'deceased').length}</p>
+							<p class="text-pink-300/80 text-sm font-medium uppercase tracking-wide">Deceased Records</p>
+							<p class="text-4xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent">{civilians.filter(c => c.data.status === 'deceased').length}</p>
 						</div>
-						<div class="w-12 h-12 bg-pink-400/20 rounded-lg flex items-center justify-center group-hover:bg-pink-400/30 transition-all duration-300">
-							<span class="text-2xl">🟢</span>
+						<div class="w-16 h-16 bg-gradient-to-br from-pink-400/30 to-red-400/30 rounded-xl flex items-center justify-center group-hover:from-pink-400/40 group-hover:to-red-400/40 transition-all duration-300 shadow-lg">
+							<span class="text-3xl">💀</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-6 hover:border-cyan-400/60 transition-all duration-300 group">
+				<div class="bg-gradient-to-br from-slate-800/60 via-blue-900/20 to-slate-800/60 border border-blue-400/40 rounded-xl p-8 hover:border-blue-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
 					<div class="flex items-center justify-between">
 						<div>
-							<p class="text-cyan-300/70 text-sm font-medium">Case Connections</p>
-							<p class="text-3xl font-bold text-cyan-400">{civilians.reduce((acc, c) => acc + c.data.linked_cases.length, 0)}</p>
+							<p class="text-blue-300/80 text-sm font-medium uppercase tracking-wide">Unique Affiliations</p>
+							<p class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{uniqueAffiliations.length}</p>
 						</div>
-						<div class="w-12 h-12 bg-cyan-400/20 rounded-lg flex items-center justify-center group-hover:bg-cyan-400/30 transition-all duration-300">
-							<span class="text-2xl">🔗</span>
+						<div class="w-16 h-16 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-xl flex items-center justify-center group-hover:from-blue-400/40 group-hover:to-cyan-400/40 transition-all duration-300 shadow-lg">
+							<span class="text-3xl">🏢</span>
 						</div>
 					</div>
-				</div>
-			</div>
-
-			<!-- Recent Civilians -->
-			<div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-8">
-				<div class="flex items-center justify-between mb-6">
-					<h2 class="text-2xl font-bold text-purple-400">Recent Civilian Records</h2>
-					<span class="text-purple-300/70 text-sm">Showing {civilians.length} records</span>
-				</div>
-				
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{civilians.map((civilian) => (
-						<div class="bg-slate-700/30 border border-purple-400/20 rounded-lg p-4 hover:border-purple-400/40 hover:bg-slate-700/50 transition-all duration-200 group">
-							<div class="flex items-center justify-between mb-3">
-								<h3 class="text-purple-300 font-medium">{civilian.data.name}</h3>
-								<span class={`px-2 py-1 rounded-full text-xs font-medium ${
-									civilian.data.status === 'active' 
-										? 'bg-green-400/20 text-green-300' 
-										: 'bg-red-400/20 text-red-300'
-								}`}>
-									{civilian.data.status}
-								</span>
-							</div>
-							
-							                            <div class="space-y-2 text-sm">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-purple-300/70">Linked Cases:</span>
-                                    <span class="text-purple-300 font-medium">{civilian.data.linked_cases.length}</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-purple-300/70">Affiliations:</span>
-                                    <span class="text-purple-300 font-medium">{civilian.data.affiliations.length || 'None'}</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-purple-300/70">Professions:</span>
-                                    <span class="text-purple-300 font-medium">{civilian.data.professions?.length || 'None'}</span>
-                                </div>
-                            </div>
-							
-							<div class="mt-4">
-								<a href={`/civilians/${civilian.id}`} 
-								   class="text-purple-400 hover:text-purple-300 text-sm font-medium group-hover:underline transition-all duration-200">
-									View Details →
-								</a>
-							</div>
-						</div>
-					))}
-				</div>
-			</div>
-
-			<!-- Quick Actions -->
-			<div class="mt-12 text-center">
-				<div class="inline-flex items-center space-x-4 p-4 bg-slate-800/50 border border-purple-400/30 rounded-lg">
-					<a href="/cases" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
-						<span>📋</span>
-						<span>View Cases</span>
-					</a>
-					<a href="/" class="flex items-center space-x-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 border border-purple-400/30 hover:border-purple-400/60 rounded-lg font-medium transition-all duration-300">
-						<span>🏠</span>
-						<span>Dashboard</span>
-					</a>
 				</div>
 			</div>
 		</div>

@@ -2,6 +2,8 @@
     "name": "Emma Everdale",
     "affiliations": [],
     "status": "alive",
-    "linked_cases": [],
-    "professions": ["Waitress"]
-} 
+    "professions": [
+        "Waitress at Starbucks"
+    ],
+    "birth_date": null
+}

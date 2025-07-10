@@ -1,10 +1,11 @@
 {
     "name": "Kai Stone",
-    "affiliations": ["CyberArena"],
-    "status": "deceased",
-    "linked_cases": [
-        7426,
-        4963
+    "affiliations": [
+        "CyberArena"
     ],
-    "professions": ["Coach for CyberAthletes"]
+    "status": "deceased",
+    "professions": [
+        "Coach for CyberAthletes"
+    ],
+    "birth_date": null
 }

@@ -2,6 +2,8 @@
     "name": "Joslin Rivers",
     "affiliations": [],
     "status": "alive",
-    "linked_cases": [],
-    "professions": ["Journalist"]
-} 
+    "professions": [
+        "Journalist"
+    ],
+    "birth_date": null
+}

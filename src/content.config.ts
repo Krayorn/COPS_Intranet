@@ -13,7 +13,9 @@ const cases = defineCollection({
         opened_on: z.string(),
         closed_on: z.string(),
         status: z.string(),
-        priority_detective: z.string()
+        priority_detective: z.string(),
+        persons_of_interest: z.array(z.string()).optional().default([]),
+        assigned_personnel: z.array(z.string()).optional().default([])
     }),
 });
 
@@ -34,9 +36,9 @@ const civilians = defineCollection({
     schema: z.object({
         name: z.string(),
         status: z.string(),
-        linked_cases: z.array(z.number()),
         affiliations: z.array(z.string()),
-        professions: z.array(z.string())
+        professions: z.array(z.string()),
+        birth_date: z.string().nullable()
     }),
 });
 

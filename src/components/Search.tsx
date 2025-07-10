@@ -6,7 +6,7 @@ export function Search({ options }) {
     
     return (
         <form>
-            <input className="text-black" type="text" onChange={e => setSearch(e.target.value)} value={search}  placeholder="John Doe" ></input>
+            <input className="text-black" type="text" onChange={e => setSearch(e.target.value)} value={search} placeholder="John Doe" autoComplete="off"></input>
             {
                 possibilities.length > 0 && <div className="flex flex-col bg-white text-black" >
                     {possibilities.map(possibility => {

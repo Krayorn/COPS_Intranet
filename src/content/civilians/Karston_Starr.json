@@ -1,10 +1,11 @@
 {
     "name": "Karston Starr",
-    "affiliations": ["CyberArena"],
-    "status": "deceased",
-    "linked_cases": [
-        7426,
-        4963
+    "affiliations": [
+        "CyberArena"
     ],
-    "professions": ["Gamer"]
+    "status": "deceased",
+    "professions": [
+        "Gamer"
+    ],
+    "birth_date": "2012-06-03"
 }

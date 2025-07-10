@@ -12,6 +12,20 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+
+// Get all civilians and personnel for lookup
+const civilians = await getCollection('civilians');
+const personnel = await getCollection('personal');
+
+// Find persons of interest
+const personsOfInterest = civilians.filter(civilian => 
+    entry.data.persons_of_interest.includes(civilian.data.name)
+);
+
+// Find assigned personnel
+const assignedPersonnel = personnel.filter(person => 
+    entry.data.assigned_personnel.includes(person.data.matriculation_number)
+);
 ---
 
 <Layout>
@@ -37,7 +51,7 @@ const { entry } = Astro.props;
             <!-- Case Details Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Case Info -->
-                <div class="lg:col-span-2">
+                <div class="lg:col-span-2 space-y-6">
                     <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl p-6">
                         <h3 class="text-xl font-bold text-cyan-400 mb-4 flex items-center">
                             <span class="mr-2">📋</span>
@@ -89,6 +103,68 @@ const { entry } = Astro.props;
                             </div>
                         </div>
                     </div>
+
+                    <!-- Persons of Interest -->
+                    {personsOfInterest.length > 0 && (
+                        <div class="bg-slate-800/30 border border-orange-400/20 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-orange-400 mb-4 flex items-center">
+                                <span class="mr-2">👥</span>
+                                Persons of Interest
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {personsOfInterest.map((civilian) => (
+                                    <div class="bg-slate-700/30 border border-orange-400/30 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-200 group">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
+                                                <span class="text-slate-900 font-bold text-sm">{civilian.data.name.split(' ').map(n => n[0]).join('')}</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-orange-300 font-medium group-hover:text-orange-200 transition-all duration-200">
+                                                    {civilian.data.name}
+                                                </h4>
+                                                <p class="text-orange-400/70 text-xs">{civilian.data.status}</p>
+                                            </div>
+                                        </div>
+                                        <a href={`/civilians/${civilian.id}`} 
+                                           class="text-orange-400 hover:text-orange-300 text-sm hover:underline transition-all duration-200">
+                                            View Profile →
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <!-- Assigned Personnel -->
+                    {assignedPersonnel.length > 0 && (
+                        <div class="bg-slate-800/30 border border-blue-400/20 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center">
+                                <span class="mr-2">👮</span>
+                                Assigned Personnel
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {assignedPersonnel.map((person) => (
+                                    <div class="bg-slate-700/30 border border-blue-400/30 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-200 group">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center">
+                                                <span class="text-slate-900 font-bold text-sm">#{person.data.matriculation_number}</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-blue-300 font-medium group-hover:text-blue-200 transition-all duration-200">
+                                                    {person.data.name}
+                                                </h4>
+                                                <p class="text-blue-400/70 text-xs">{person.data.rank}</p>
+                                            </div>
+                                        </div>
+                                        <a href={`/personal/${person.id}`} 
+                                           class="text-blue-400 hover:text-blue-300 text-sm hover:underline transition-all duration-200">
+                                            View Profile →
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <!-- Quick Actions Sidebar -->
@@ -111,21 +187,7 @@ const { entry } = Astro.props;
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl p-6">
-                        <h3 class="text-lg font-bold text-cyan-400 mb-4">Quick Actions</h3>
-                        <div class="space-y-3">
-                            <button class="w-full px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
-                                📝 Add Notes
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
-                                🔗 Link Evidence
-                            </button>
-                            <button class="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-cyan-400/30 hover:border-cyan-400/60 rounded-lg font-medium transition-all duration-200">
-                                👥 Add Suspects
-                            </button>
-                        </div>
-                    </div>
+
 
                     <!-- Case Timeline -->
                     <div class="bg-slate-800/30 border border-purple-400/20 rounded-xl p-6">
