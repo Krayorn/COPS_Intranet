@@ -4,5 +4,6 @@
     "joined_on": "2030-06-12",
     "status": "active",
     "department": "COPS",
-    "matriculation_number": "092"
+    "matriculation_number": "092",
+    "pseudonyms": ["MC"]
 }

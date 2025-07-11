@@ -14,7 +14,8 @@ const SCHEMAS = {
         status: "alive",     // string - required  
         affiliations: [],     // array of strings
         professions: [],      // array of strings
-        birth_date: null      // string or null
+        birth_date: null,     // string or null
+        pseudonyms: []        // array of strings
     },
     cases: {
         case_number: null,    // string - required
@@ -32,7 +33,8 @@ const SCHEMAS = {
         joined_on: null,      // string - required
         status: null,         // string - required
         department: null,     // string - required
-        matriculation_number: null // string - required
+        matriculation_number: null, // string - required
+        pseudonyms: []        // array of strings
     }
 };
 
@@ -68,6 +70,12 @@ function updateFile(filePath, collectionType) {
                 updatedData.professions = [];
                 updated = true;
             }
+            
+            if (!Array.isArray(updatedData.pseudonyms)) {
+                console.log(`  Fixing pseudonyms: converting to array`);
+                updatedData.pseudonyms = [];
+                updated = true;
+            }
         }
         
         // Ensure arrays are properly formatted for cases
@@ -81,6 +89,15 @@ function updateFile(filePath, collectionType) {
             if (!Array.isArray(updatedData.assigned_personnel)) {
                 console.log(`  Fixing assigned_personnel: converting to array`);
                 updatedData.assigned_personnel = [];
+                updated = true;
+            }
+        }
+        
+        // Ensure arrays are properly formatted for personal
+        if (collectionType === 'personal') {
+            if (!Array.isArray(updatedData.pseudonyms)) {
+                console.log(`  Fixing pseudonyms: converting to array`);
+                updatedData.pseudonyms = [];
                 updated = true;
             }
         }

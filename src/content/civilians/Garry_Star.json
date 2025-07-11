@@ -1,7 +1,8 @@
 {
     "name": "Garry Star",
-    "affiliations": [],
     "status": "alive",
     "professions": [],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

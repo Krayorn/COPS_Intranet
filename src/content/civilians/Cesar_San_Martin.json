@@ -1,11 +1,10 @@
 {
     "name": "Cesar San Martin",
-    "affiliations": [
-        "clanton 14"
-    ],
     "status": "alive",
     "professions": [
         "Social Worker"
     ],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

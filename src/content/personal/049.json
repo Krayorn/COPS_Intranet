@@ -1,8 +1,9 @@
 {
-    "name": "Shell",
+    "name": "May Linn",
     "rank": "R1E1",
     "joined_on": "2029-11-25",
     "status": "active",
     "department": "COPS",
-    "matriculation_number": "049"
+    "matriculation_number": "049",
+    "pseudonyms": ["Shell"]
 }

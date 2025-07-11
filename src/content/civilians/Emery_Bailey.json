@@ -1,9 +1,10 @@
 {
     "name": "Emery Bailey",
-    "affiliations": [],
     "status": "alive",
     "professions": [
         "President of foundation DissConnect"
     ],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

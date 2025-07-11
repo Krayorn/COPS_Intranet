@@ -1,9 +1,10 @@
 {
     "name": "Aisha Williams",
-    "affiliations": [],
     "status": "alive",
     "professions": [
         "Principal at Santa Monica High School"
     ],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

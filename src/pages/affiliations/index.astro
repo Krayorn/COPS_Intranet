@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const affiliations = await getCollection('affiliations');
+
+// Get all unique kinds from affiliations
+const allKinds = [...new Set(affiliations.flatMap(a => a.data.kinds))];
+const kindStats = allKinds.map(kind => ({
+    name: kind,
+    count: affiliations.filter(a => a.data.kinds.includes(kind)).length
+}));
+
+// Fixed color palette to cycle through
+const colorPalette = [
+    { bg: 'blue', text: 'blue' },
+    { bg: 'red', text: 'red' },
+    { bg: 'green', text: 'green' },
+    { bg: 'purple', text: 'purple' },
+    { bg: 'orange', text: 'orange' }
+];
+---
+
+<Layout title="Affiliations">
+    <main class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                    🏢 Affiliations Database
+                </h1>
+                <p class="text-cyan-200/80">
+                    Total Affiliations: <span class="text-cyan-400 font-bold">{affiliations.length}</span>
+                </p>
+            </div>
+
+            <!-- Affiliations Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {affiliations.map((affiliation) => (
+                    <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl p-6 hover:bg-slate-700/30 hover:border-cyan-400/40 transition-all duration-300 group">
+                        <div class="flex items-start justify-between mb-4">
+                            <h2 class="text-xl font-semibold text-cyan-100 group-hover:text-cyan-300 transition-colors">
+                                {affiliation.data.name}
+                            </h2>
+                            <div class="w-8 h-8 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-lg flex items-center justify-center border border-cyan-400/30">
+                                <span class="text-cyan-400 text-sm">🏢</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-cyan-200/80 text-sm mb-4 line-clamp-3">
+                            {affiliation.data.description}
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            {affiliation.data.kinds.map((kind) => (
+                                <span class="px-2 py-1 bg-cyan-400/10 border border-cyan-400/30 rounded-md text-xs text-cyan-300">
+                                    {kind}
+                                </span>
+                            ))}
+                        </div>
+                        
+                        <a href={`/affiliations/${affiliation.id}`} 
+                           class="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-medium text-sm group-hover:underline transition-all duration-200">
+                            View Details
+                            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                ))}
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="mt-8">
+                <!-- Total Affiliations -->
+                <div class="mb-6">
+                    <div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-4 max-w-xs">
+                        <div class="flex items-center justify-between">
+                            <span class="text-cyan-300/70 text-sm">Total Affiliations</span>
+                            <span class="text-2xl font-bold text-cyan-400">{affiliations.length}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kind Stats -->
+                {kindStats.length > 0 && (
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {kindStats.map((stat, index) => {
+                            const colors = colorPalette[index % colorPalette.length];
+                            return (
+                                <div class={`bg-slate-800/50 border border-${colors.bg}-400/30 rounded-lg p-4`}>
+                                    <div class="flex items-center justify-between">
+                                        <span class={`text-${colors.text}-300/70 text-sm`}>{stat.name}</span>
+                                        <span class={`text-2xl font-bold text-${colors.text}-400`}>
+                                            {stat.count}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    </main>
+</Layout> 

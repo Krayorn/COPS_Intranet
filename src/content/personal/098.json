@@ -4,5 +4,6 @@
     "joined_on": "2030-08-19",
     "status": "active",
     "department": "COPS",
-    "matriculation_number": "098"
+    "matriculation_number": "098",
+    "pseudonyms": ["Styx"]
 }

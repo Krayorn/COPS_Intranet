@@ -1,11 +1,10 @@
 {
     "name": "Karston Starr",
-    "affiliations": [
-        "CyberArena"
-    ],
     "status": "deceased",
     "professions": [
         "Gamer"
     ],
-    "birth_date": "2012-06-03"
+    "birth_date": "2012-06-03",
+    "affiliations": [],
+    "pseudonyms": ["JaKilla"]
 }

@@ -113,7 +113,12 @@ const activePersonnel = personal.filter(p => p.data.status === 'active').length;
 				<div class="bg-slate-800/30 border border-blue-400/20 rounded-xl p-8 hover:border-blue-400/40 transition-all duration-300">
 					<div class="flex items-center justify-between mb-6">
 						<h2 class="text-2xl font-bold text-blue-400">👮 Personnel Database</h2>
-						<span class="text-blue-300/70 text-sm">{activePersonnel} Active</span>
+						<div class="flex items-center space-x-4">
+							<span class="text-blue-300/70 text-sm">{activePersonnel} Active</span>
+							<a href="/personnel" class="text-blue-300 hover:text-blue-200 text-sm font-medium hover:underline">
+								View All →
+							</a>
+						</div>
 					</div>
 					<div class="space-y-3">
 						{personal.slice(0, 5).map((person) => (

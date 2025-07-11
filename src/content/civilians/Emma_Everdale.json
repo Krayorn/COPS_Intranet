@@ -1,9 +1,10 @@
 {
     "name": "Emma Everdale",
-    "affiliations": [],
     "status": "alive",
     "professions": [
         "Waitress at Starbucks"
     ],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

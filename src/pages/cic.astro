@@ -5,6 +5,7 @@ import { getCollection } from "astro:content";
 import { IN_GAME_DATE } from '../../constants';
 
 const civilians = await getCollection('civilians');
+const affiliations = await getCollection('affiliations');
 
 // Function to calculate age from birth date
 function calculateAge(birthDate: string | null): number | null {
@@ -19,9 +20,7 @@ function calculateAge(birthDate: string | null): number | null {
     return age;
 }
 
-// Calculate unique affiliations
-const allAffiliations = civilians.flatMap(civilian => civilian.data.affiliations);
-const uniqueAffiliations = [...new Set(allAffiliations)].filter(affiliation => affiliation.trim() !== '');
+const uniqueAffiliationsCount = affiliations.length;
 ---
 
 <Layout>
@@ -73,37 +72,37 @@ const uniqueAffiliations = [...new Set(allAffiliations)].filter(affiliation => a
 
 			<!-- Quick Stats -->
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-				<div class="bg-gradient-to-br from-slate-800/60 via-purple-900/20 to-slate-800/60 border border-purple-400/40 rounded-xl p-8 hover:border-purple-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
+				<div class="bg-gradient-to-br from-slate-800/60 via-purple-900/20 to-slate-800/60 border border-purple-400/40 rounded-xl p-8 hover:border-purple-400/60 hover:shadow-xl transition-all duration-300">
 					<div class="flex items-center justify-between">
 						<div>
 							<p class="text-purple-300/80 text-sm font-medium uppercase tracking-wide">Total Civilians</p>
 							<p class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{civilians.length}</p>
 						</div>
-						<div class="w-16 h-16 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-xl flex items-center justify-center group-hover:from-purple-400/40 group-hover:to-pink-400/40 transition-all duration-300 shadow-lg">
+						<div class="w-16 h-16 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg">
 							<span class="text-3xl">👥</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-gradient-to-br from-slate-800/60 via-pink-900/20 to-slate-800/60 border border-pink-400/40 rounded-xl p-8 hover:border-pink-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
+				<div class="bg-gradient-to-br from-slate-800/60 via-pink-900/20 to-slate-800/60 border border-pink-400/40 rounded-xl p-8 hover:border-pink-400/60 hover:shadow-xl transition-all duration-300">
 					<div class="flex items-center justify-between">
 						<div>
 							<p class="text-pink-300/80 text-sm font-medium uppercase tracking-wide">Deceased Records</p>
 							<p class="text-4xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent">{civilians.filter(c => c.data.status === 'deceased').length}</p>
 						</div>
-						<div class="w-16 h-16 bg-gradient-to-br from-pink-400/30 to-red-400/30 rounded-xl flex items-center justify-center group-hover:from-pink-400/40 group-hover:to-red-400/40 transition-all duration-300 shadow-lg">
+						<div class="w-16 h-16 bg-gradient-to-br from-pink-400/30 to-red-400/30 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg">
 							<span class="text-3xl">💀</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-gradient-to-br from-slate-800/60 via-blue-900/20 to-slate-800/60 border border-blue-400/40 rounded-xl p-8 hover:border-blue-400/60 hover:shadow-xl transition-all duration-300 group transform hover:scale-105">
+				<div class="bg-gradient-to-br from-slate-800/60 via-blue-900/20 to-slate-800/60 border border-blue-400/40 rounded-xl p-8 hover:border-blue-400/60 hover:shadow-xl transition-all duration-300">
 					<div class="flex items-center justify-between">
 						<div>
 							<p class="text-blue-300/80 text-sm font-medium uppercase tracking-wide">Unique Affiliations</p>
-							<p class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{uniqueAffiliations.length}</p>
+							<p class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{uniqueAffiliationsCount}</p>
 						</div>
-						<div class="w-16 h-16 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-xl flex items-center justify-center group-hover:from-blue-400/40 group-hover:to-cyan-400/40 transition-all duration-300 shadow-lg">
+						<div class="w-16 h-16 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg">
 							<span class="text-3xl">🏢</span>
 						</div>
 					</div>

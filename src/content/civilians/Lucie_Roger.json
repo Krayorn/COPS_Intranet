@@ -1,7 +1,8 @@
 {
     "name": "Lucie Roger",
-    "affiliations": [],
     "status": "alive",
     "professions": [],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

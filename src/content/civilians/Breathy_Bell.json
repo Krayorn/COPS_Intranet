@@ -1,7 +1,8 @@
 {
     "name": "Breathy Bell",
-    "affiliations": [],
     "status": "deceased",
     "professions": [],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

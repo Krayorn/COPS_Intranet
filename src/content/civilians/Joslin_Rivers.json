@@ -1,9 +1,10 @@
 {
     "name": "Joslin Rivers",
-    "affiliations": [],
     "status": "alive",
     "professions": [
         "Journalist"
     ],
-    "birth_date": null
+    "birth_date": null,
+    "affiliations": [],
+    "pseudonyms": []
 }

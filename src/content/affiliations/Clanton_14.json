@@ -1,0 +1,7 @@
+{
+    "name": "clanton 14",
+    "description": "A local mexican street gang operating in the Clanton area, known for various criminal activities and territorial disputes.",
+    "kinds": ["Gang", "Cartel"],
+    "members": [],
+    "linked_individuals": ["Cesar San Martin"]
+} 
