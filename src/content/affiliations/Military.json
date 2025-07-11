@@ -1,0 +1,7 @@
+{
+  "name": "Military",
+  "description": "Military group.",
+  "kinds": ["military"],
+  "members": ["Archibald Stonebridge", "Derek Rogers"],
+  "linked_individuals": []
+} 

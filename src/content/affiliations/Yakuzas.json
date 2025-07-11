@@ -1,0 +1,7 @@
+{
+  "name": "Yakuzas",
+  "description": "Japanese organized crime syndicate.",
+  "kinds": ["Yakuzas"],
+  "members": ["Satoshi Kimura", "Misaki Kimura"],
+  "linked_individuals": []
+} 

@@ -1,0 +1,18 @@
+{
+    "case_number": "3010",
+    "name": "The Gin Reaper",
+    "opened_on": "2032-12-15",
+    "closed_on": "2032-12-17",
+    "status": "closed",
+    "priority_detective": "094",
+    "persons_of_interest": [
+        "Wayne Backer",
+        "Finigan Benworth",
+        "Mario Garcia"
+    ],
+    "assigned_personnel": [
+        "142",
+        "088",
+        "094"
+    ]
+}

@@ -4,11 +4,16 @@
     "opened_on": "2032-12-14",
     "closed_on": "2032-12-17",
     "status": "closed",
-    "priority_detective": "023",
-    "persons_of_interest": [],
+    "priority_detective": "094",
+    "persons_of_interest": [
+        "Hariun Sharma",
+        "Logan Scott",
+        "Dakota Hashbourne",
+        "Prudence Slawn"
+    ],
     "assigned_personnel": [
-        "023",
+        "094",
         "088",
-        "032"
+        "142"
     ]
 }
