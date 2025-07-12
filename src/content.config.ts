@@ -11,7 +11,7 @@ const cases = defineCollection({
         case_number: z.string(),
         name: z.string(),
         opened_on: z.string(),
-        closed_on: z.string(),
+        closed_on: z.string().nullable(),
         status: z.string(),
         priority_detective: z.string(),
         persons_of_interest: z.array(z.string()).optional().default([]),
