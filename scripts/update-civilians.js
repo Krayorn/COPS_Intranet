@@ -12,7 +12,6 @@ const SCHEMAS = {
     civilians: {
         name: null,           // string - required
         status: "alive",     // string - required  
-        affiliations: [],     // array of strings
         professions: [],      // array of strings
         birth_date: null,     // string or null
         pseudonyms: []        // array of strings
@@ -66,13 +65,7 @@ function updateFile(filePath, collectionType) {
         }
         
         // Ensure arrays are properly formatted for civilians
-        if (collectionType === 'civilians') {
-            if (!Array.isArray(updatedData.affiliations)) {
-                console.log(`  Fixing affiliations: converting to array`);
-                updatedData.affiliations = [];
-                updated = true;
-            }
-            
+        if (collectionType === 'civilians') {            
             if (!Array.isArray(updatedData.professions)) {
                 console.log(`  Fixing professions: converting to array`);
                 updatedData.professions = [];

@@ -1,7 +1,7 @@
 {
     "name": "YinYang Industries",
     "description": "A cutting-edge technology company specializing in neuroscience, neural interfaces, and advanced medical technologies.",
-    "kinds": ["Corporation", "Triade"],
+    "kinds": ["Corporation", "Triad"],
     "members": [
         "Charlotte Klark",
         "Henry Brooks",

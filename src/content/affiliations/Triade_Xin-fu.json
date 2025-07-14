@@ -1,0 +1,11 @@
+{
+  "name": "Triad Xin-fu",
+  "description": "Chinese organized crime syndicate operating in California. Controls Jinxiu.",
+  "kinds": ["Triad"],
+  "members": [
+    "Patrick Yu"
+  ],
+  "linked_individuals": [
+    "Nicholas Tianpeng"
+  ]
+} 
