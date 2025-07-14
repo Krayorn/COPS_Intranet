@@ -1,7 +1,8 @@
 {
-  "name": "Killian Braum",
-  "status": "alive",
-  "professions": [],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Killian Braum",
+    "status": "alive",
+    "professions": [],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

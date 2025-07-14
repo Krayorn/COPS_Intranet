@@ -1,7 +1,8 @@
 {
-  "name": "Hariun Sharma",
-  "status": "alive",
-  "professions": [],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Hariun Sharma",
+    "status": "alive",
+    "professions": [],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

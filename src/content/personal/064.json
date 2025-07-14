@@ -5,5 +5,8 @@
     "status": "active",
     "department": "COPS",
     "matriculation_number": "064",
-    "pseudonyms": ["Cav"]
+    "pseudonyms": [
+        "Cav"
+    ],
+    "title": "detective"
 }

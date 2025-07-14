@@ -5,5 +5,8 @@
     "status": "active",
     "department": "COPS",
     "matriculation_number": "098",
-    "pseudonyms": ["Styx"]
+    "pseudonyms": [
+        "Styx"
+    ],
+    "title": "detective"
 }

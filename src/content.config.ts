@@ -28,6 +28,7 @@ const personal = defineCollection({
         status: z.string(),
         department: z.string(),
         matriculation_number: z.string(),
+        title: z.string(),
         pseudonyms: z.array(z.string()).optional().default([])
     }),
 });
@@ -54,5 +55,16 @@ const affiliations = defineCollection({
     }),
 });
 
+const groups = defineCollection({
+    loader: glob({ pattern: "./*.json", base: "./src/content/groups" }),
+    schema: z.object({
+        name: z.string(),
+        parent: z.string().nullable(),
+        description: z.string().nullable(),
+        leader: z.string().nullable(),
+        members: z.array(z.string()).optional().default([])
+    })
+});
+
 // 4. Export a single `collections` object to register your collection(s)
-export const collections = { cases, personal, civilians, affiliations };
+export const collections = { cases, personal, civilians, affiliations, groups };

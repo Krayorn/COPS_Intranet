@@ -1,7 +1,10 @@
 {
-  "name": "Prudence Slawn",
-  "status": "alive",
-  "professions": ["Substitute of procuror"],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Prudence Slawn",
+    "status": "alive",
+    "professions": [
+        "Substitute of procuror"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

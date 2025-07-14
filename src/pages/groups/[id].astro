@@ -1,0 +1,354 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const groups = await getCollection('groups');
+  return groups.map(group => ({
+    params: { id: group.data.name },
+    props: { group }
+  }));
+}
+
+const { group } = Astro.props;
+const allPersonnel = await getCollection('personal');
+const allGroups = await getCollection('groups');
+
+// Helper: recursively sum all members (including leader) for a group and its descendants
+function getRecursiveMemberCount(groupName: any, groups: any, personnel: any) {
+  const thisGroup = groups.find((g: any) => g.data.name === groupName);
+  if (!thisGroup) return 0;
+  let count = 0;
+  // Count direct members
+  if (thisGroup.data.members) {
+    count += thisGroup.data.members.length;
+  }
+  // Count leader if present
+  if (thisGroup.data.leader) {
+    count += 1;
+  }
+  // Find children
+  const children = groups.filter((g: any) => g.data.parent === groupName);
+  for (const child of children) {
+    count += getRecursiveMemberCount(child.data.name, groups, personnel);
+  }
+  return count;
+}
+
+// Get current group's members
+const allMembers = allPersonnel.filter((person: any) => group.data.members && group.data.members.includes(person.data.matriculation_number));
+// Filter out the leader from the members list since they're displayed separately
+const members = allMembers.filter((person: any) => !group.data.leader || person.data.matriculation_number !== group.data.leader);
+
+// Calculate total members including leader and all children recursively
+const totalMembers = getRecursiveMemberCount(group.data.name, allGroups, allPersonnel);
+
+// Get leader information if exists
+let leaderInfo = null;
+if (group.data.leader) {
+  try {
+    const leaderEntry = await getEntry('personal', group.data.leader);
+    if (leaderEntry) {
+      leaderInfo = {
+        name: leaderEntry.data.name,
+        title: leaderEntry.data.title,
+        rank: leaderEntry.data.rank,
+        matriculation_number: leaderEntry.data.matriculation_number
+      };
+    }
+  } catch (error) {
+    console.warn(`Could not find leader with ID: ${group.data.leader}`);
+  }
+}
+
+// Recursively find all subgroups at any depth under this group
+function findAllSubgroups(parentGroupName: any, groups: any, visited = new Set()) {
+  if (visited.has(parentGroupName)) {
+    return []; // Prevent infinite loops
+  }
+  visited.add(parentGroupName);
+  const directChildren = groups.filter((subgroup: any) => subgroup.data.parent === parentGroupName);
+  let allSubgroups = [...directChildren];
+  for (const child of directChildren) {
+    const nestedSubgroups = findAllSubgroups(child.data.name, groups, visited);
+    allSubgroups.push(...nestedSubgroups);
+  }
+  return allSubgroups;
+}
+
+// Find all subgroups at any depth
+const allSubgroups = findAllSubgroups(group.data.name, allGroups);
+
+// Helper: get parent chain for a group
+function getParentChain(subgroup: any, groups: any) {
+  const chain = [];
+  let current = subgroup;
+  while (current.data.parent) {
+    const parent = groups.find((g: any) => g.data.name === current.data.parent);
+    if (!parent) break;
+    chain.unshift(parent);
+    current = parent;
+  }
+  return chain;
+}
+
+// Get members for each subgroup
+const subgroupsWithMembers = await Promise.all(
+  allSubgroups.map(async (subgroup: any) => {
+    const subgroupMembers = allPersonnel.filter((person: any) => 
+      subgroup.data.members && subgroup.data.members.includes(person.data.matriculation_number)
+    );
+    // Get subgroup leader info if exists
+    let subgroupLeaderInfo = null;
+    if (subgroup.data.leader) {
+      try {
+        const leaderEntry = await getEntry('personal', subgroup.data.leader);
+        if (leaderEntry) {
+          subgroupLeaderInfo = {
+            name: leaderEntry.data.name,
+            title: leaderEntry.data.title,
+            rank: leaderEntry.data.rank,
+            matriculation_number: leaderEntry.data.matriculation_number
+          };
+        }
+      } catch (error) {
+        console.warn(`Could not find subgroup leader with ID: ${subgroup.data.leader}`);
+      }
+    }
+    // Get parent chain for this subgroup
+    const parentChain = getParentChain(subgroup, allGroups);
+    // Get recursive member count for this subgroup
+    const recursiveTotalMembers = getRecursiveMemberCount(subgroup.data.name, allGroups, allPersonnel);
+    return {
+      ...subgroup,
+      members: subgroupMembers,
+      leaderInfo: subgroupLeaderInfo,
+      totalMembers: recursiveTotalMembers,
+      parentChain
+    };
+  })
+);
+
+---
+
+<Layout title={`${group.data.name} - LAPD Group`}>
+  <main class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4">
+          👥 {group.data.name}
+        </h1>
+        {group.data.description && (
+          <p class="text-cyan-200/80 mb-4">{group.data.description}</p>
+        )}
+        <div class="flex flex-wrap gap-4 text-sm text-cyan-300/80">
+          <span>Members: <span class="text-cyan-400 font-bold">{totalMembers}</span></span>
+        </div>
+      </div>
+
+      <!-- Leader Card -->
+      {leaderInfo && (
+        <div class="mb-6">
+          <div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <a href={`/personal/${leaderInfo.matriculation_number}`} 
+                     class="text-cyan-400 hover:text-cyan-300 font-mono font-medium hover:underline transition-all duration-200">
+                    #{leaderInfo.matriculation_number}
+                  </a>
+                  <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-400/20 text-green-300 border border-green-400/30">
+                    active
+                  </span>
+                </div>
+                <h3 class="text-lg font-bold text-cyan-100 mb-1">{leaderInfo.name}</h3>
+                <div class="text-cyan-200/80 text-sm">{leaderInfo.rank}</div>
+                <div class="text-cyan-300/80 italic text-sm">{leaderInfo.title}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Main Group Members Table -->
+      {members.length > 0 && (
+        <div class="mb-8">
+          <h2 class="text-xl font-bold text-cyan-400 mb-3">Group Members</h2>
+          <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl overflow-hidden">
+            <!-- Table Header -->
+            <div class="bg-slate-700/50 border-b border-cyan-400/30 p-6">
+              <div class="grid grid-cols-6 gap-4 text-sm font-medium text-cyan-300">
+                <div>ID</div>
+                <div>Name</div>
+                <div>Rank</div>
+                <div>Title</div>
+                <div>Department</div>
+                <div>Status</div>
+              </div>
+            </div>
+
+            <!-- Table Body -->
+            <div class="divide-y divide-cyan-400/10">
+              {members.sort((a: any, b: any) => a.data.name.localeCompare(b.data.name)).map((person: any) => (
+                <div class="p-6 hover:bg-slate-700/30 transition-all duration-200 group">
+                  <div class="grid grid-cols-6 gap-4 items-center">
+                    <div>
+                      <a href={`/personal/${person.data.matriculation_number}`} 
+                         class="text-cyan-400 hover:text-cyan-300 font-mono font-medium group-hover:underline transition-all duration-200">
+                        #{person.data.matriculation_number}
+                      </a>
+                    </div>
+                    <div class="text-cyan-100 font-medium">{person.data.name}</div>
+                    <div class="text-cyan-200/80">{person.data.rank}</div>
+                    <div class="text-cyan-200/80 italic">{person.data.title}</div>
+                    <div class="text-cyan-200/80">{person.data.department}</div>
+                    <div>
+                      <span class={`px-3 py-1 rounded-full text-xs font-medium ${
+                        person.data.status === 'active' 
+                          ? 'bg-green-400/20 text-green-300 border border-green-400/30' 
+                          : 'bg-red-400/20 text-red-300 border border-red-400/30'
+                      }`}>
+                        {person.data.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Subgroups Tables -->
+      {subgroupsWithMembers.map((subgroup: any) => (
+        <div class="mb-8">
+          {/* Parent chain display */}
+          <div class="mb-2 text-xs text-cyan-300 flex flex-wrap gap-1 items-center">
+            {subgroup.parentChain.map((parent: any, idx: any) => (
+              <>
+                <a href={`/groups/${encodeURIComponent(parent.data.name)}`} class="hover:underline text-cyan-400 font-semibold">{parent.data.name}</a>
+                <span class="mx-1">/</span>
+              </>
+            ))}
+            <a href={`/groups/${encodeURIComponent(subgroup.data.name)}`} class="hover:underline text-cyan-400 font-semibold">
+              {subgroup.data.name}
+            </a>
+          </div>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-xl font-bold text-cyan-400">
+              <a href={`/groups/${encodeURIComponent(subgroup.data.name)}`} class="hover:underline">
+                {subgroup.data.name}
+              </a>
+            </h2>
+            <div class="text-sm text-cyan-300/80">
+              {subgroup.data.description && (
+                <span class="mr-4">{subgroup.data.description}</span>
+              )}
+              <span>Members: <span class="text-cyan-400 font-bold">{subgroup.totalMembers}</span></span>
+            </div>
+          </div>
+
+          {/* Subgroup Leader */}
+          {subgroup.leaderInfo && (
+            <div class="mb-4">
+              <div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-200">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                      <a href={`/personal/${subgroup.leaderInfo.matriculation_number}`} 
+                         class="text-cyan-400 hover:text-cyan-300 font-mono font-medium hover:underline transition-all duration-200">
+                        #{subgroup.leaderInfo.matriculation_number}
+                      </a>
+                      <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-400/20 text-green-300 border border-green-400/30">
+                        active
+                      </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-cyan-100 mb-1">{subgroup.leaderInfo.name}</h4>
+                    <div class="text-cyan-200/80 text-sm">{subgroup.leaderInfo.rank}</div>
+                    <div class="text-cyan-300/80 italic text-sm">{subgroup.leaderInfo.title}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Subgroup Members Table */}
+          {subgroup.members.length > 0 && (
+            <div class="bg-slate-800/30 border border-cyan-400/20 rounded-xl overflow-hidden">
+              <!-- Table Header -->
+              <div class="bg-slate-700/50 border-b border-cyan-400/30 p-6">
+                <div class="grid grid-cols-6 gap-4 text-sm font-medium text-cyan-300">
+                  <div>ID</div>
+                  <div>Name</div>
+                  <div>Rank</div>
+                  <div>Title</div>
+                  <div>Department</div>
+                  <div>Status</div>
+                </div>
+              </div>
+
+              <!-- Table Body -->
+              <div class="divide-y divide-cyan-400/10">
+                {subgroup.members
+                  .filter((person: any) => !subgroup.data.leader || person.data.matriculation_number !== subgroup.data.leader)
+                  .sort((a: any, b: any) => a.data.name.localeCompare(b.data.name))
+                  .map((person: any) => (
+                  <div class="p-6 hover:bg-slate-700/30 transition-all duration-200 group">
+                    <div class="grid grid-cols-6 gap-4 items-center">
+                      <div>
+                        <a href={`/personal/${person.data.matriculation_number}`} 
+                          class="text-cyan-400 hover:text-cyan-300 font-mono font-medium group-hover:underline transition-all duration-200">
+                          #{person.data.matriculation_number}
+                        </a>
+                      </div>
+                      <div class="text-cyan-100 font-medium">{person.data.name}</div>
+                      <div class="text-cyan-200/80">{person.data.rank}</div>
+                      <div class="text-cyan-200/80 italic">{person.data.title}</div>
+                      <div class="text-cyan-200/80">{person.data.department}</div>
+                      <div>
+                        <span class={`px-3 py-1 rounded-full text-xs font-medium ${
+                          person.data.status === 'active' 
+                            ? 'bg-green-400/20 text-green-300 border border-green-400/30' 
+                            : 'bg-red-400/20 text-red-300 border border-red-400/30'
+                        }`}>
+                          {person.data.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <!-- Quick Stats -->
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-800/50 border border-green-400/30 rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <span class="text-green-300/70 text-sm">Active Members</span>
+            <span class="text-2xl font-bold text-green-400">
+              {allMembers.filter((p: any) => p.data.status === 'active').length}
+            </span>
+          </div>
+        </div>
+        <div class="bg-slate-800/50 border border-red-400/30 rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <span class="text-red-300/70 text-sm">Inactive Members</span>
+            <span class="text-2xl font-bold text-red-400">
+              {allMembers.filter((p: any) => p.data.status === 'inactive').length}
+            </span>
+          </div>
+        </div>
+        <div class="bg-slate-800/50 border border-cyan-400/30 rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <span class="text-cyan-300/70 text-sm">Total Members</span>
+            <span class="text-2xl font-bold text-cyan-400">{totalMembers}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout> 

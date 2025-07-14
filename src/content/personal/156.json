@@ -1,9 +1,12 @@
 {
-    "name": "'Devil' Nakamura",
+    "name": "Nakamura",
     "rank": "R1E1",
     "joined_on": "2031-04-27",
     "status": "active",
     "department": "COPS",
     "matriculation_number": "156",
-    "pseudonyms": ["Devil"]
+    "pseudonyms": [
+        "Devil"
+    ],
+    "title": "detective"
 }

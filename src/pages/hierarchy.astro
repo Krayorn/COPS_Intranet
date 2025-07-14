@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import HierarchyTree from '../components/HierarchyTree';
+
+// Get all groups from the collection
+const groups = await getCollection('groups');
+
+// Convert to the format expected by the React component with leader details
+const groupsData = await Promise.all(groups.map(async group => {
+  let leaderInfo = null;
+  
+  if (group.data.leader) {
+    try {
+      const leaderEntry = await getEntry('personal', group.data.leader);
+      if (leaderEntry) {
+        leaderInfo = {
+          name: leaderEntry.data.name,
+          title: leaderEntry.data.title,
+          rank: leaderEntry.data.rank
+        };
+      }
+    } catch (error) {
+      console.warn(`Could not find leader with ID: ${group.data.leader}`);
+    }
+  }
+  
+  return {
+    name: group.data.name,
+    parent: group.data.parent,
+    description: group.data.description,
+    leader: leaderInfo,
+    members: group.data.members
+  };
+}));
+---
+
+<Layout>
+  <main class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 p-6">
+    <div class="max-w-6xl mx-auto">
+      <HierarchyTree client:load groups={groupsData} />
+    </div>
+  </main>
+</Layout> 

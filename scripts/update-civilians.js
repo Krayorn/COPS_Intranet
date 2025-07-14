@@ -34,7 +34,15 @@ const SCHEMAS = {
         status: null,         // string - required
         department: null,     // string - required
         matriculation_number: null, // string - required
+        title: "detective",  // string - required, default 'detective'
         pseudonyms: []        // array of strings
+    },
+    groups: {
+        name: null,           // string - required
+        parent: null,         // string or null
+        description: "",      // string, optional
+        leader: null,         // string, optional (personnel id)
+        members: []           // array of strings (personnel ids)
     }
 };
 
@@ -165,7 +173,7 @@ function processCollection(collectionName) {
 function main() {
     console.log('Updating content files to match schema requirements...\n');
     
-    const collections = ['civilians', 'cases', 'personal'];
+    const collections = ['civilians', 'cases', 'personal', 'groups'];
     const results = {};
     
     // Process each collection

@@ -14,6 +14,8 @@ export async function getStaticPaths() {
 }
 
 const { entry, cases } = Astro.props;
+const groups = await getCollection('groups');
+const memberGroups = groups.filter(group => group.data.members && group.data.members.includes(entry.data.matriculation_number));
 ---
 
 <Layout>
@@ -96,13 +98,23 @@ const { entry, cases } = Astro.props;
                                 <span class="text-slate-900 font-bold text-xl">{entry.data.name.split(' ').map(n => n[0]).join('')}</span>
                             </div>
                             <h3 class="text-lg font-bold text-blue-300">{entry.data.name}</h3>
-                            <p class="text-blue-400/70 text-sm">{entry.data.rank}</p>
+                            <p class="text-blue-400/70 text-sm">{entry.data.title.charAt(0).toUpperCase() + entry.data.title.slice(1)} {entry.data.rank}</p>
                             {entry.data.pseudonyms && entry.data.pseudonyms.length > 0 && (
                                 <div class="mt-4 text-left">
                                     <div class="text-xs font-semibold text-cyan-300 uppercase mb-1">Pseudonyms</div>
                                     <ul class="list-disc list-inside text-cyan-200 text-sm">
                                         {entry.data.pseudonyms.map((pseudonym) => (
                                             <li>{pseudonym}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            {memberGroups.length > 0 && (
+                                <div class="mt-4 text-left">
+                                    <div class="text-xs font-semibold text-cyan-300 uppercase mb-1">Groups</div>
+                                    <ul class="list-disc list-inside text-cyan-200 text-sm">
+                                        {memberGroups.map(group => (
+                                            <li>{(group as any).data.name}</li>
                                         ))}
                                     </ul>
                                 </div>

@@ -1,9 +1,10 @@
 {
-  "name": "Kim Park",
-  "rank": "R1E1",
-  "joined_on": "2028-01-10",
-  "status": "active",
-  "department": "RHD",
-  "matriculation_number": "900",
-  "pseudonyms": []
-} 
+    "name": "Kim Park",
+    "rank": "R1E1",
+    "joined_on": "2028-01-10",
+    "status": "active",
+    "department": "RHD",
+    "matriculation_number": "900",
+    "pseudonyms": [],
+    "title": "detective"
+}

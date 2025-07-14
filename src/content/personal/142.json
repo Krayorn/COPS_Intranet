@@ -1,9 +1,10 @@
 {
     "name": "James Scott",
-    "rank": "R3E4",
+    "rank": "E3R5",
     "joined_on": "2031-01-30",
     "status": "active",
     "department": "COPS",
     "matriculation_number": "142",
-    "pseudonyms": []
+    "pseudonyms": [],
+    "title": "detective"
 }

@@ -1,7 +1,12 @@
 {
-  "name": "Logan Scott",
-  "status": "deceased",
-  "professions": ["Ex military, special forces"],
-  "birth_date": null,
-  "pseudonyms": ["Bishop"]
-} 
+    "name": "Logan Scott",
+    "status": "deceased",
+    "professions": [
+        "Ex military, special forces"
+    ],
+    "birth_date": null,
+    "pseudonyms": [
+        "Bishop"
+    ],
+    "affiliations": []
+}

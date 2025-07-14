@@ -1,7 +1,10 @@
 {
-  "name": "Satoshi Kimura",
-  "status": "alive",
-  "professions": ["ronin"],
-  "birth_date": "1992-08-14",
-  "pseudonyms": []
-} 
+    "name": "Satoshi Kimura",
+    "status": "alive",
+    "professions": [
+        "ronin"
+    ],
+    "birth_date": "1992-08-14",
+    "pseudonyms": [],
+    "affiliations": []
+}

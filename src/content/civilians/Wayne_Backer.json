@@ -1,7 +1,10 @@
 {
-  "name": "Wayne Backer",
-  "status": "alive",
-  "professions": ["Construction worker at Cruize construction"],
-  "birth_date": null,
-  "pseudonyms": []
+    "name": "Wayne Backer",
+    "status": "alive",
+    "professions": [
+        "Construction worker at Cruize construction"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
 }

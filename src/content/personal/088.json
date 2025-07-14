@@ -1,9 +1,12 @@
 {
     "name": "Lucia Elvria",
-    "rank": "R1E1",
+    "rank": "E2R3",
     "joined_on": "2024-01-01",
     "status": "active",
     "department": "COPS",
     "matriculation_number": "088",
-    "pseudonyms": ["Furia"]
+    "pseudonyms": [
+        "Furia"
+    ],
+    "title": "detective"
 }

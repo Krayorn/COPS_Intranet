@@ -1,7 +1,10 @@
 {
-  "name": "Tiana Jackson",
-  "status": "deceased",
-  "professions": ["Corporal in military"],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Tiana Jackson",
+    "status": "deceased",
+    "professions": [
+        "Corporal in military"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

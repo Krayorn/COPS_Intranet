@@ -1,0 +1,7 @@
+{
+    "name": "Cops",
+    "parent": "Chief of Police",
+    "description": "Root division for the COPS hierarchy.",
+    "leader": "001",
+    "members": []
+}

@@ -1,7 +1,8 @@
 {
-  "name": "Kaleb",
-  "status": "deceased",
-  "professions": [],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Kaleb",
+    "status": "deceased",
+    "professions": [],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

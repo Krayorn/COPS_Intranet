@@ -5,5 +5,8 @@
     "status": "active",
     "department": "COPS",
     "matriculation_number": "134",
-    "pseudonyms": ["Sky"]
+    "pseudonyms": [
+        "Sky"
+    ],
+    "title": "detective"
 }

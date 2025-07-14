@@ -5,5 +5,8 @@
     "status": "active",
     "department": "COPS",
     "matriculation_number": "037",
-    "pseudonyms": ["Rainbow"]
+    "pseudonyms": [
+        "Rainbow"
+    ],
+    "title": "detective"
 }

@@ -1,7 +1,12 @@
 {
-  "name": "Dakota Hashbourne",
-  "status": "alive",
-  "professions": ["Ex military, special forces"],
-  "birth_date": null,
-  "pseudonyms": ["Queen"]
-} 
+    "name": "Dakota Hashbourne",
+    "status": "alive",
+    "professions": [
+        "Ex military, special forces"
+    ],
+    "birth_date": null,
+    "pseudonyms": [
+        "Queen"
+    ],
+    "affiliations": []
+}

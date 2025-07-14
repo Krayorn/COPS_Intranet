@@ -1,0 +1,7 @@
+{
+  "name": "Board of Police Commissioners",
+  "parent": "LAPD",
+  "description": "This 5 prefects of police are the highest authority in the police department.",
+  "leader": null,
+  "members": []
+} 

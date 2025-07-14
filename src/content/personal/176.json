@@ -1,9 +1,12 @@
 {
     "name": "Carol Murphy",
-    "rank": "R1E1",
+    "rank": "E3R7",
     "joined_on": "2031-11-08",
     "status": "active",
     "department": "COPS",
     "matriculation_number": "176",
-    "pseudonyms": ["Warden"]
+    "pseudonyms": [
+        "Warden"
+    ],
+    "title": "lieutenant"
 }

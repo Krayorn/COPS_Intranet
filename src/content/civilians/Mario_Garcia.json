@@ -1,7 +1,10 @@
 {
-  "name": "Mario Garcia",
-  "status": "alive",
-  "professions": ["Quartermaster at Cruize construction"],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Mario Garcia",
+    "status": "alive",
+    "professions": [
+        "Quartermaster at Cruize construction"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

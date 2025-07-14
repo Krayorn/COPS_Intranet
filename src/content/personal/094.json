@@ -1,9 +1,10 @@
 {
     "name": "Aaron Cruise",
-    "rank": "R2E4",
+    "rank": "E3R5",
     "joined_on": "2029-12-03",
     "status": "active",
     "department": "COPS",
     "matriculation_number": "094",
-    "pseudonyms": []
+    "pseudonyms": [],
+    "title": "detective"
 }

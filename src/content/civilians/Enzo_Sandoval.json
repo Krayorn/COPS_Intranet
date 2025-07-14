@@ -1,7 +1,10 @@
 {
-  "name": "Enzo Sandoval",
-  "status": "alive",
-  "professions": ["Ex neuro-chemist at YinYang Industry"],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Enzo Sandoval",
+    "status": "alive",
+    "professions": [
+        "Ex neuro-chemist at YinYang Industry"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}

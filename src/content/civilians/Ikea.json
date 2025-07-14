@@ -1,7 +1,10 @@
 {
-  "name": "Ikea",
-  "status": "deceased",
-  "professions": [],
-  "birth_date": null,
-  "pseudonyms": ["Ikea"]
-} 
+    "name": "Ikea",
+    "status": "deceased",
+    "professions": [],
+    "birth_date": null,
+    "pseudonyms": [
+        "Ikea"
+    ],
+    "affiliations": []
+}

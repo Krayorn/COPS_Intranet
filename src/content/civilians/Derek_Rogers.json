@@ -1,7 +1,10 @@
 {
-  "name": "Derek Rogers",
-  "status": "alive",
-  "professions": ["Ex-military"],
-  "birth_date": null,
-  "pseudonyms": []
-} 
+    "name": "Derek Rogers",
+    "status": "alive",
+    "professions": [
+        "Ex-military"
+    ],
+    "birth_date": null,
+    "pseudonyms": [],
+    "affiliations": []
+}
