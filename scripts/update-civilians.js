@@ -52,14 +52,24 @@ function updateFile(filePath, collectionType) {
         const data = JSON.parse(fileContent);
         
         let updated = false;
-        const updatedData = { ...data };
+        const updatedData = {};
         const schema = SCHEMAS[collectionType];
         
-        // Check each expected field
+        // Only keep fields that are defined in the schema
         for (const [field, defaultValue] of Object.entries(schema)) {
-            if (!(field in updatedData)) {
+            if (field in data) {
+                updatedData[field] = data[field];
+            } else {
                 console.log(`  Adding missing field: ${field} = ${JSON.stringify(defaultValue)}`);
                 updatedData[field] = defaultValue;
+                updated = true;
+            }
+        }
+        
+        // Check for extra fields and remove them
+        for (const field in data) {
+            if (!(field in schema)) {
+                console.log(`  Removing extra field: ${field}`);
                 updated = true;
             }
         }
