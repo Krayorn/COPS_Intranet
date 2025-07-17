@@ -31,7 +31,6 @@ const SCHEMAS = {
         rank: null,           // string - required
         joined_on: null,      // string - required
         status: null,         // string - required
-        department: null,     // string - required
         matriculation_number: null, // string - required
         title: "detective",  // string - required, default 'detective'
         pseudonyms: []        // array of strings

@@ -26,7 +26,6 @@ const personal = defineCollection({
         rank: z.string(),
         joined_on: z.string(),
         status: z.string(),
-        department: z.string(),
         matriculation_number: z.string(),
         title: z.string(),
         pseudonyms: z.array(z.string()).optional().default([])

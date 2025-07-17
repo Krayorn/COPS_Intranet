@@ -1,0 +1,9 @@
+{
+  "name": "SCIU",
+  "parent": "Chief of Police",
+  "description": "Specialized Crime Investigation Unit",
+  "leader": null,
+  "members": [
+    "858"
+  ]
+} 

@@ -1,0 +1,9 @@
+{
+  "name": "RHD",
+  "parent": "Chief of Police",
+  "description": "Robbery-Homicide Division",
+  "leader": null,
+  "members": [
+    "900"
+  ]
+} 
